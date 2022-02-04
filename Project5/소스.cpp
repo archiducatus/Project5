@@ -23,6 +23,10 @@ public:
 
 	MyString& assign(const MyString& str);
 	MyString& assign(const char* str);
+
+	MyString& insert(int loc, const MyString& str);
+	MyString& insert(int loc, const char* str);
+	MyString& insert(int loc, char c);
 };
 
 MyString::MyString(char c) {
@@ -108,13 +112,55 @@ MyString& MyString::assign(const char* str) {
 	return *this;
 }
 
+MyString& MyString::insert(int loc, const MyString& str) {
+	if (loc<0 || loc>string_length) return *this;
+
+	if (string_length + str.string_length > memory_capacity) {
+		memory_capacity = string_length + str.string_length;
+
+		char* prev_string_content = string_content;
+		string_content = new char[memory_capacity];
+
+		int i;
+		for (i = 0; i < loc; i++) string_content[i] = prev_string_content[i];
+
+		for (int j = 0; j != str.string_length; j++) string_content[i + j] = str.string_content[j];
+
+		for (; i < string_length; i++) string_content[str.string_length + i] = prev_string_content[i];
+
+		delete[] prev_string_content;
+
+		string_length += str.string_length;
+		return *this;
+	}
+
+	for (int i = string_length - 1; i >= loc; i--) string_content[i + str.string_length] = string_content[i];
+	for (int i = 0; i < str.string_length; i++) string_content[i + loc] = str.string_content[i];
+
+	string_length += str.string_length;
+	return *this;
+}
+
+MyString& MyString::insert(int loc, const char* str) {
+	MyString temp(str);
+	return insert(loc, temp);
+}
+
+MyString& MyString::insert(int loc, char c) {
+	MyString temp(c);
+	return insert(loc, temp);
+}
 
 int main() {
-	MyString str1("very vyvvye long string");
+	MyString str1("very long string");
+	MyString str2("<some string inserted between>");
 	str1.reserve(30);
 
 	cout << "Capacity : " << str1.capacity() << endl;
 	cout << "String length : " << str1.length() << endl;
+	str1.println();
+
+	str1.insert(5, str2);
 	str1.println();
 
 	return 0;
