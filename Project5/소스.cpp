@@ -33,6 +33,8 @@ public:
 	int find(int find_from, MyString& str) const;
 	int find(int find_from, const char* str) const;
 	int find(int find_from, char c) const;
+
+	int compare(const MyString& str) const;
 };
 
 MyString::MyString(char c) {
@@ -191,11 +193,23 @@ int MyString::find(int find_from, char c) const {
 	return find(find_from, temp);
 }
 
-int main() {
-	MyString str1("this is a very very long string");
+int MyString::compare(const MyString& str) const {
+	for (int i = 0; i < std::min(string_length, str.string_length); i++) {
+		if (string_content[i] > str.string_content[i]) return 1;
+		else if (string_content[i] < str.string_content[i]) return -1;
+	}
 
-	cout << "Location of first <very> in the string : " << str1.find(0, "very") << endl;
-	cout << "Location of second <very> in the string : " << str1.find(str1.find(0, "very") + 1, "very") << endl;
+	if (string_length == str.string_length) return 0;
+	else if (string_length > str.string_length) return 1;
+
+	return -1;
+}
+
+int main() {
+	MyString str1("abcdef");
+	MyString str2("abcde");
+
+	cout << "str1 and str2 compare : " << str1.compare(str2) << endl;
 
 	return 0;
 }
