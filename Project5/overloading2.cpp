@@ -13,25 +13,29 @@ public:
 	Complex(const Complex& c) { real = c.real, img = c.img; }
 	Complex(const char* str);
 
+
+	Complex& operator=(const Complex& c);
+	/*
 	Complex operator+(const Complex& c) const;
 	Complex operator-(const Complex& c) const;
 	Complex operator*(const Complex& c) const;
 	Complex operator/(const Complex& c) const;
 
-	Complex operator+(const char* str) const;
-	Complex operator-(const char* str) const;
-	Complex operator*(const char* str) const;
-	Complex operator/(const char* str) const;
-
-	Complex& operator=(const Complex& c);
-
 	Complex& operator+=(const Complex& c);
 	Complex& operator-=(const Complex& c);
 	Complex& operator*=(const Complex& c);
 	Complex& operator/=(const Complex& c);
+	*/
 
 	void println() { cout << "( " << real << " + " << img << "i )" << endl; }
+
+	friend Complex operator+(const Complex& a, const Complex& b);
 };
+
+Complex operator+(const Complex& a, const Complex& b) {
+	Complex temp(a.real + b.real, a.img + b.img);
+	return temp;
+}
 
 Complex::Complex(const char* str) {
 	int begin = 0;
@@ -90,6 +94,13 @@ double Complex::get_number(const char* str, int from, int to) const {
 	return num;
 }
 
+Complex& Complex::operator=(const Complex& c) {
+	real = c.real;
+	img = c.img;
+	return *this;
+}
+
+/*
 Complex Complex::operator+(const Complex& c) const {
 	Complex temp(real + c.real, img + c.img);
 	return temp;
@@ -112,32 +123,6 @@ Complex Complex::operator/(const Complex& c) const {
 	return temp;
 }
 
-Complex Complex::operator+(const char* str) const {
-	Complex temp(str);
-	return (*this) + temp;
-}
-
-Complex Complex::operator-(const char* str) const {
-	Complex temp(str);
-	return (*this) - temp;
-}
-
-Complex Complex::operator*(const char* str) const {
-	Complex temp(str);
-	return (*this) * temp;
-}
-
-Complex Complex::operator/(const char* str) const {
-	Complex temp(str);
-	return (*this) / temp;
-}
-
-Complex& Complex::operator=(const Complex& c) {
-	real = c.real;
-	img = c.img;
-	return *this;
-}
-
 Complex& Complex::operator+=(const Complex& c) {
 	(*this) = (*this) + c;
 	return *this;
@@ -157,15 +142,15 @@ Complex& Complex::operator/=(const Complex& c) {
 	(*this) = (*this) / c;
 	return *this;
 }
+*/
 
 int main() {
 	Complex a(0, 0);
-	a = a + "-1.1 + i3.923";
-	a.println();
-	a = a - "1.2 -i1.823";
-	a.println();
-	a = a * "2.3+i22";
-	a.println();
-	a = a / "-12+i55";
-	a.println();
+	a = "-1.1 + i3.923" + a;
+	a = a + a;
+
+	Complex b(1, 2);
+	b = a + b;
+
+	b.println();
 }
