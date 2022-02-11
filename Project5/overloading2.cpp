@@ -13,7 +13,7 @@ public:
 	Complex(const Complex& c) { real = c.real, img = c.img; }
 	Complex(const char* str);
 
-
+	Complex& operator+=(const Complex& c);
 	Complex& operator=(const Complex& c);
 	/*
 	Complex operator+(const Complex& c) const;
@@ -21,7 +21,6 @@ public:
 	Complex operator*(const Complex& c) const;
 	Complex operator/(const Complex& c) const;
 
-	Complex& operator+=(const Complex& c);
 	Complex& operator-=(const Complex& c);
 	Complex& operator*=(const Complex& c);
 	Complex& operator/=(const Complex& c);
@@ -30,6 +29,7 @@ public:
 	void println() { cout << "( " << real << " + " << img << "i )" << endl; }
 
 	friend Complex operator+(const Complex& a, const Complex& b);
+	friend std::ostream& operator<<(std::ostream& os, const Complex& c);
 };
 
 Complex operator+(const Complex& a, const Complex& b) {
@@ -94,10 +94,20 @@ double Complex::get_number(const char* str, int from, int to) const {
 	return num;
 }
 
+Complex& Complex::operator+=(const Complex& c) {
+	(*this) = *this + c;
+	return *this;
+}
+
 Complex& Complex::operator=(const Complex& c) {
 	real = c.real;
 	img = c.img;
 	return *this;
+}
+
+std::ostream& operator<<(std::ostream& os, const Complex& c) {
+	os << "( " << c.real << " + " << c.img << "i ) ";
+	return os;
 }
 
 /*
@@ -123,11 +133,6 @@ Complex Complex::operator/(const Complex& c) const {
 	return temp;
 }
 
-Complex& Complex::operator+=(const Complex& c) {
-	(*this) = (*this) + c;
-	return *this;
-}
-
 Complex& Complex::operator-=(const Complex& c) {
 	(*this) = (*this) - c;
 	return *this;
@@ -147,10 +152,5 @@ Complex& Complex::operator/=(const Complex& c) {
 int main() {
 	Complex a(0, 0);
 	a = "-1.1 + i3.923" + a;
-	a = a + a;
-
-	Complex b(1, 2);
-	b = a + b;
-
-	b.println();
+	cout << "a 의 값은 : " << a << " 이다. " << endl;
 }
